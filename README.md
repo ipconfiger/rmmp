@@ -90,3 +90,28 @@ If you want save the output, use output redirection operator.
 ```shell
 rmmp -m path_to_modal_file -t path_to_template_dir -p db_sql > db.sql
 ```
+### Draw graphics
+
+My write a template in template_sample/dot_graph.txt.
+It can generate a dot file for [Graphivz](https://graphviz.org/)
+
+Your must install it first. In Mac:
+```shell
+brew install graphviz
+```
+
+You can download this file and put it in template folder.
+
+First run with next command:
+
+```shell
+rmmp -m path_to_modal_file -t path_to_template_dir -p dot_graph > uml_pic.dot
+```
+then generate graphics:
+
+```shell
+dot -Tpng -o uml.png uml_pic.dot
+```
+then you get the PNG file
+
+

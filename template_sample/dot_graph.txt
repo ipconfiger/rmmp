@@ -1,0 +1,25 @@
+digraph G {
+  fontname = "Bitstream Vera Sans"
+  fontsize = 10
+
+  node [
+    fontname = "Bitstream Vera Sans"
+    fontsize = 12
+    shape = "record"
+  ]
+
+  edge [
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+  ]
+  {% for entity in entities %}
+  // 定义类
+  {{ entity.name }} [label = "{ -{{entity.name}}- |{% for fd in entity.fields %}+ {{fd.name}} : {{fd.description}}\l{% endfor %} }"]
+  {% endfor %}
+
+  edge [arrowhead = "vee", style = "dashed"]
+  {% for r in relations %}
+  {{ r.src }} -> {{ r.tar }} [label = "{{r.key}}<{{ r.tar }}>"]
+  {% endfor %}
+
+}

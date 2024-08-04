@@ -10,8 +10,8 @@ use std::path::Path;
 use serde::{ Serialize};
 
 fn get_parameter() -> ArgMatches {
-    let matches = App::new("MyApp")
-        .version("0.1.0")
+    let matches = App::new("rmmp")
+        .version("0.1.1")
         .author("Alexander Li. <superpowerlee@gmail.com>")
         .about("Map modal design file to many type of modal file")
         .arg(Arg::with_name("modal file")
@@ -51,6 +51,13 @@ struct Field {
     description: String,
     types: HashMap<String, Types>,
     ending: String,
+}
+
+#[derive(Debug, Clone, Serialize)]
+struct Relation {
+    src: String,
+    tar: String,
+    key: String,
 }
 
 impl Field {
@@ -183,13 +190,24 @@ fn main() {
         };
         let mut entities = process_entities(file_txt.as_str());
         let immut_entities = entities.clone();
+        let mut relations: Vec<Relation> = vec![];
         for et in entities.iter_mut() {
             for fd in et.fields.iter_mut() {
+                let src= et.name.clone();
+                let mut tar = "".to_string();
+                let mut key = "".to_string();
+                let mut hash_relation = false;
                 for (pn, tp) in fd.types.iter_mut() {
                     if tp.name.starts_with("@") {
+                        hash_relation = true;
                         let trans = get_types(immut_entities.clone(), tp.clone().name, pn.to_string());
+                        tar = tp.clone().name.as_str()[1..].split(".").next().unwrap().to_string();
+                        key = fd.name.clone();
                         tp.name = trans;
                     }
+                }
+                if hash_relation {
+                    relations.push(Relation { src, tar, key })
                 }
             }
         }
@@ -204,8 +222,10 @@ fn main() {
                         ::std::process::exit(1);
                     }
                 };
+                println!("relations: {relations:?}");
                 let mut context = Context::new();
                 context.insert("entities", &entities);
+                context.insert("relations", &relations);
                 let output_txt = match tera.render(format!("{}.txt", pn).as_str(), &context) {
                    Ok(result)=>{result},
                     Err(ex)=>{
