@@ -1,0 +1,5 @@
+{% for entity in entities %}CREATE TABLE {{ entity.name }} (
+    {% for fd in entity.fields %}{{fd.name}} {{ fd.types.pg.name }}{{ fd.ending }}
+    {% endfor %}
+);
+{% endfor %}

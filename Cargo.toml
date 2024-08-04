@@ -1,0 +1,10 @@
+[package]
+name = "rmmp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = "3.2.25"
+exitcode = "1.1.2"
+tera = "1.20.0"
+serde = { version = "1.0.204", features = ["derive"] }

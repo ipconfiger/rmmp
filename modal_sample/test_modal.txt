@@ -1,0 +1,23 @@
+User :
+    # 用户表
+    @pg varchar(32) PRIMARY KEY
+    @rust String
+    @typescript string
+    name: 用户姓名
+
+    @pg int
+    @rust i32
+    @typescript number
+    age: 用户年龄
+
+Content :
+    # 内容表
+    @pg varchar(64)
+    @rust String
+    @typescript string
+    title: 内容标题
+
+    @pg @User.name
+    @rust User
+    @typescript User
+    poster: 发布用户
